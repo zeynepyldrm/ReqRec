@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_NAME=reqrecdb
+      - DB_USER=reqrec
+      - DB_PASSWORD=reqrec1234
+      - DB_HOST=db
+      - DB_PORT=5432
+    command: bash -c 'while ! </dev/tcp/db/5432; do sleep 2; done; java -jar app.jar'
+
+  db:
+    image: postgres:11
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=reqrec
+      - POSTGRES_PASSWORD=reqrec1234
+      - POSTGRES_DB=reqrecdb
+volumes:
+  pgdata:
