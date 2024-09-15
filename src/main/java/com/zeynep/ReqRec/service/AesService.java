@@ -9,13 +9,9 @@ import java.util.Base64;
 
 public class AesService {
 
-    String sId = "Password1";
-    String SALT2 = "saltyyy";
+    String sKey = "Password1saltyyy";
 
-    // Get the Key
-    byte[] key = (SALT2 + sId).getBytes();
-
-    SecretKeySpec secKey = new SecretKeySpec(key, "AES");
+    SecretKeySpec secKey = new SecretKeySpec(sKey.getBytes(), "AES");
 
     public String encryptText(String plainText) throws Exception {
         Cipher aesCipher = Cipher.getInstance("AES");

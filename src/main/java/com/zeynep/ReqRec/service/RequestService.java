@@ -1,31 +1,29 @@
 package com.zeynep.ReqRec.service;
 
-import com.zeynep.ReqRec.dto.RequestDTO;
 import com.zeynep.ReqRec.model.Request;
 import com.zeynep.ReqRec.repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RequestService {
 
-    @Autowired
-    private RequestRepository repository;
+    private final RequestRepository repository;
 
     AesService aesService = new AesService();
 
-    public RequestService() throws Exception {
-    }
-
     public Request saveMessage(Request request) throws Exception {
+        if(Strings.isEmpty(request.getMessage())){
+            throw new Exception("message cannot be null");
+        }
         request.setMessage(aesService.encryptText(request.getMessage()));
-
-         return repository.save(request);
+        return repository.save(request);
     }
 
     public List<Request> getAllRequest() throws Exception {
